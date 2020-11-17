@@ -5,6 +5,8 @@ export interface Book {
   isbn: string
 };
 
-const BookItem = ({book}: {book: Book}) => <li>{book.title}</li>;
+const BookItem: React.FC<{book: Book}> = ({book: {title}}) => {
+  return <li>{title}</li>;
+};
 
 export default BookItem;
