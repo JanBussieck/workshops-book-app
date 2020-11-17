@@ -9,28 +9,20 @@ interface BookEditProps {
 const BookEdit: React.FC<BookEditProps> = ({book, onSubmit}) => {
   // useState hooks
   // set initial values for book form title / isbn
-  const [title, setTitle] = useState<string>(book.title);
-  const [isbn, setIsbn] = useState<string>(book.isbn);
+  const [form, setForm] = useState(book);
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { target: { value } } = event;
-    setTitle(value);
-  }
-
-  const handleIsbnChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
-    setIsbn(value);
+  const handleFormInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { target: { value, name } } = event;
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: value
+    }));
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({
-      title,
-      isbn
-    });
-    onSubmit && onSubmit({
-      title,
-      isbn
-    })
+    console.log(form);
+    onSubmit && onSubmit(form);
   };
 
   return (
@@ -40,16 +32,16 @@ const BookEdit: React.FC<BookEditProps> = ({book, onSubmit}) => {
         name="title"
         type="text"
         required
-        value={title}
-        onChange={handleTitleChange} />
+        value={form.title}
+        onChange={handleFormInputChange} />
       <br />
       <label htmlFor="isbn">ISBN: </label>
       <input id="isbn"
         name="isbn"
         type="text"
         required
-        value={isbn}
-        onChange={handleIsbnChange} />
+        value={form.isbn}
+        onChange={handleFormInputChange} />
       <br />
       <button type='submit'>Submit</button>
     </form>
