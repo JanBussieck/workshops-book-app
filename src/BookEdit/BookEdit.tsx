@@ -46,8 +46,19 @@ const BookEdit: React.FC<BookEditProps> = ({onSubmit}) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(form);
-    onSubmit && onSubmit(form);
+    if (selectedBook) {
+      fetch(`http://localhost:4730/books/${selectedBook.isbn}`, {
+        method: 'PUT',
+        body: JSON.stringify(form),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((response) => response.json())
+      .then((book) => {
+        console.log('book', book);
+        onSubmit && onSubmit(form);
+      });
+    }
   };
 
   return (
