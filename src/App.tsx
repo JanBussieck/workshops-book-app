@@ -6,6 +6,7 @@ import BookEdit from './BookEdit/BookEdit';
 function App() {
   const [books, setBooks] = useState<Array<Book>>([])
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedBookId, setSelectedBookId] = useState<string>();
 
   useEffect(() => {
     fetch('http://localhost:4730/books').then((response) => {
@@ -19,14 +20,16 @@ function App() {
     });
   }, [setBooks, setIsLoading])
 
-  const book = books[0];
+  const book = selectedBookId && books.find(({isbn}) => {
+    return isbn === selectedBookId;
+  });
 
   return isLoading ? (
     <div>... Loading books ...</div>
   ) : (
     <div>
-      <BookList books={books} />
-      {book && <BookEdit book={book} />}
+      <BookList books={books} onBookSelect={setSelectedBookId} />
+      {book && <BookEdit book={book} key={book.isbn} />}
     </div>
   );
 }

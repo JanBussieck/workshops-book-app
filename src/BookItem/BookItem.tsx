@@ -5,8 +5,15 @@ export interface Book {
   isbn: string
 };
 
-const BookItem: React.FC<{book: Book}> = ({book: {title}}) => {
-  return <li>{title}</li>;
+interface BookProps {
+  book: Book;
+  onClick: () => void;
+}
+
+const BookItem: React.FC<BookProps> = ({book: {title}, onClick}) => {
+  return <li onClick={onClick} style={{cursor: 'pointer'}}>
+    {title}
+  </li>;
 };
 
 export default BookItem;
