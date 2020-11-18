@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
+import {SelectBookContext} from '../App';
 import type {Book} from '../BookItem/BookItem';
 
 interface BookEditProps {
-  book: Book;
   onSubmit?: (book: Book) => void;
 }
 
@@ -12,10 +12,15 @@ const validatePresence = (value: string) => {
   }
 };
 
-const BookEdit: React.FC<BookEditProps> = ({book, onSubmit}) => {
+const BookEdit: React.FC<BookEditProps> = ({onSubmit}) => {
+  const {selectedBook} = useContext(SelectBookContext);
   // useState hooks
   // set initial values for book form title / isbn
-  const [form, setForm] = useState(book);
+  const [form, setForm] = useState(selectedBook || {
+    title: '',
+    isbn: ''
+  });
+
   const [errors, setErrors] = useState({
     title: null,
     isbn: null
