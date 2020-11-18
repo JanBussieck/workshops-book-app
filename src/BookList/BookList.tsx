@@ -1,14 +1,14 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import BookItem from '../BookItem/BookItem';
+import {BookContext} from '../App';
 import type {Book} from '../BookItem/BookItem';
 
 interface BookListProps {
-  books: Array<Book>;
   onBookSelect: (id: string) => void;
 }
 
-const BookList: React.FC<BookListProps> = ({books, onBookSelect}) => {
-
+const BookList: React.FC<BookListProps> = ({onBookSelect}) => {
+  const {books} = useContext(BookContext);
   return (
     <Fragment>
       <h1>List of Books</h1>

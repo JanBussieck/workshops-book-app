@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {BookContext} from '../App';
 
 export interface Book {
   title: string,
@@ -10,8 +11,9 @@ interface BookProps {
   onClick: () => void;
 }
 
-const BookItem: React.FC<BookProps> = ({book: {title}, onClick}) => {
-  return <li onClick={onClick} style={{cursor: 'pointer'}}>
+const BookItem: React.FC<BookProps> = ({book: {title, isbn}, onClick}) => {
+  const {selectedBookId} = useContext(BookContext);
+  return <li onClick={onClick} style={{cursor: 'pointer', backgroundColor: selectedBookId === isbn ? 'green' : 'white'}}>
     {title}
   </li>;
 };

@@ -3,6 +3,11 @@ import BookList from './BookList/BookList';
 import type {Book} from './BookItem/BookItem';
 import BookEdit from './BookEdit/BookEdit';
 
+const initialContext: {books: Array<Book>, selectedBookId?: string} = {
+  books: []
+}
+export const BookContext = React.createContext(initialContext);
+
 function App() {
   const [books, setBooks] = useState<Array<Book>>([])
   const [isLoading, setIsLoading] = useState(true);
@@ -24,14 +29,18 @@ function App() {
     return isbn === selectedBookId;
   });
 
-  return isLoading ? (
-    <div>... Loading books ...</div>
-  ) : (
-    <div>
-      <BookList books={books} onBookSelect={setSelectedBookId} />
-      {book && <BookEdit book={book} key={book.isbn} />}
-    </div>
-  );
+  return (
+    <BookContext.Provider value={{books, selectedBookId}}>
+      {isLoading ? (
+        <div>... Loading books ...</div>
+      ) : (
+        <div>
+          <BookList onBookSelect={setSelectedBookId} />
+          {book && <BookEdit book={book} key={book.isbn} />}
+        </div>
+      )}
+    </BookContext.Provider>
+  )
 }
 
 export default App;
