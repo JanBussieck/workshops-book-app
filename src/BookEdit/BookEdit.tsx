@@ -5,7 +5,13 @@ interface BookEditProps {
   book: Book;
   onSubmit?: (book: Book) => void;
 }
-// type
+
+const validatePresence = (value: string) => {
+  if (value.trim() === '') {
+    return "Muss angegeben werden";
+  }
+};
+
 const BookEdit: React.FC<BookEditProps> = ({book, onSubmit}) => {
   // useState hooks
   // set initial values for book form title / isbn
@@ -24,6 +30,15 @@ const BookEdit: React.FC<BookEditProps> = ({book, onSubmit}) => {
     }));
   }
 
+  const handleValidate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { target: { value, name } } = event;
+    const error = validatePresence(value);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error
+    }));
+  }
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(form);
@@ -33,21 +48,21 @@ const BookEdit: React.FC<BookEditProps> = ({book, onSubmit}) => {
   return (
     <form onSubmit={handleSubmit}>
       <label htmlFor="title">Title: </label>
-      {errors.title && <div style={{border: '2px solid red'}}>errors.title</div>}
+      {errors.title && <span style={{border: '2px solid red'}}>{errors.title}</span>}
       <input id="title"
         name="title"
         type="text"
         value={form.title}
-        onBlur={() => console.log("I was blurred")}
+        onBlur={handleValidate}
         onChange={handleFormInputChange} />
       <br />
       <label htmlFor="isbn">ISBN: </label>
-      {errors.isbn && <div style={{border: '2px solid red'}}>errors.isbn</div>}
+      {errors.isbn && <span style={{border: '2px solid red'}}>{errors.isbn}</span>}
       <input id="isbn"
         name="isbn"
         type="text"
         value={form.isbn}
-        onBlur={() => console.log("I was blurred")}
+        onBlur={handleValidate}
         onChange={handleFormInputChange} />
       <br />
       <button type='submit'>Submit</button>
